@@ -1,3 +1,4 @@
+// src/middlewares/auth.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -9,17 +10,19 @@ export const authenticateToken = (
   req: AuthRequest,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ message: 'Access denied: Token not supplied' });
+    res.status(401).json({ message: 'Acceso denegado: Token no proporcionado' });
+    return; 
   }
 
   jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded: any) => {
     if (err) {
-      return res.status(403).json({ message: 'Invalid or expired tokedn' });
+      res.status(403).json({ message: 'Token inválido o expirado' });
+      return;
     }
     req.userId = decoded.userId;
     next();

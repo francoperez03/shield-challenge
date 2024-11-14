@@ -1,9 +1,10 @@
 // src/controllers/walletController.ts
-import { Response } from 'express';
 import { AuthRequest } from '../middlewares/auth';
 import { WalletService } from '../services/WalletService';
 import { UserService } from 'services/UserService';
 import { ChainService } from 'services/ChainService';
+import { CreateWalletDto } from 'dto/CreateWalletDto';
+import { Request, Response } from 'express';
 
 export class WalletController {
   constructor (
@@ -21,7 +22,7 @@ export class WalletController {
     }
   }
 
-  async createWallet(req: Request, res: Response) {
+  async createWallet(req: Request<unknown, unknown, CreateWalletDto>, res: Response) {
     const { userId, tag, chainId, address } = req.body;
 
     try {
@@ -39,7 +40,8 @@ export class WalletController {
       const wallet = await this.walletService.createWallet(user, chain, tag, address);
       res.status(201).json(wallet);
     } catch (error) {
-      res.status(500).json({ message: 'Error al crear la wallet', error: error.message });
+      const message = (error as Error).message;
+      res.status(500).json({ message: 'Error al crear la wallet', error: message });
     }
   }
 
