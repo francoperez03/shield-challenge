@@ -1,7 +1,12 @@
 {
   "scripts": {
     "dev": "nodemon --watch src -e ts --exec ts-node src/index.ts",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
+    "migration:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate ./src/migrations/migration -d src/config/data-source.ts",
+    "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/config/data-source.ts",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:restart": "docker compose down && docker compose up -d"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -10,6 +15,7 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
+    "tsconfig-paths": "^4.2.0",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

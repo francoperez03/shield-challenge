@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const config: any = {
+const ormConfig: any = {
   type: 'postgres',
   host: process.env.DB_HOST || 'localhost',
   port: Number(process.env.DB_PORT) || 5432,
@@ -14,9 +14,9 @@ const config: any = {
   entities: ['src/entities/**/*.ts'],
   migrations: ['src/migrations/**/*.ts'],
   cli: {
-    entitiesDir: 'src/entities',
-    migrationsDir: 'src/migrations',
+    entitiesDir: 'src/entities/',
+    migrationsDir: 'src/migrations/',
   },
 };
 
-export = config;
+export default ormConfig;
