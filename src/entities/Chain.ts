@@ -1,3 +1,4 @@
+// src/entities/Chain.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Wallet } from './Wallet';
 
@@ -9,8 +10,14 @@ export class Chain {
   @Column({ unique: true })
   name: string;
 
-  @Column({ unique: true })
-  symbol: string; // Símbolo de la blockchain, por ejemplo, "ETH", "BTC", etc.
+  @Column()
+  network: string;
+
+  @Column()
+  rpcUrl: string;
+
+  @Column()
+  explorerUrl: string;
 
   @OneToMany(() => Wallet, (wallet) => wallet.chain)
   wallets: Wallet[];

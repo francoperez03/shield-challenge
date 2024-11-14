@@ -2,9 +2,15 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middlewares/auth';
 import { WalletService } from '../services/WalletService';
+import { UserService } from 'services/UserService';
+import { ChainService } from 'services/ChainService';
 
 export class WalletController {
-  constructor(private walletService: WalletService) {}
+  constructor (
+    private walletService: WalletService,
+    private userService: UserService,
+    private chainService: ChainService
+  ) {}
 
   async getWallets(req: AuthRequest, res: Response) {
     try {
@@ -15,23 +21,25 @@ export class WalletController {
     }
   }
 
-  async createWallet(req: AuthRequest, res: Response) {
-    const { tag, chain, address } = req.body;
-
-    if (!chain || !address)
-      return res.status(400).json({ message: 'Chain y address son requeridos' });
+  async createWallet(req: Request, res: Response) {
+    const { userId, tag, chainId, address } = req.body;
 
     try {
-      const wallet = await this.walletService.createWallet(
-        req.userId!,
-        tag,
-        chain,
-        address
-      );
+      // Buscar el usuario usando `UserService`
+      const user = await this.userService.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
+      const chain = await this.chainService.findById(chainId);
+      if (!chain) {
+        return res.status(404).json({ message: 'Cadena no encontrada' });
+      }
+
+      const wallet = await this.walletService.createWallet(user, chain, tag, address);
       res.status(201).json(wallet);
     } catch (error) {
-      const message = (error as Error).message
-      res.status(500).json({ message });
+      res.status(500).json({ message: 'Error al crear la wallet', error: error.message });
     }
   }
 

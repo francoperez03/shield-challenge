@@ -2,6 +2,7 @@
 import { AppDataSource } from '../config/data-source';
 import { Wallet } from '../entities/Wallet';
 import { User } from '../entities/User';
+import { Chain } from 'entities/Chain';
 
 export class WalletService {
   private walletRepository = AppDataSource.getRepository(Wallet);
@@ -18,19 +19,16 @@ export class WalletService {
   }
 
   async createWallet(
-    userId: string,
+    user: User,
+    chain: Chain,
     tag: string | undefined,
-    chain: string,
     address: string
   ): Promise<Wallet> {
-    const user = await this.userRepository.findOneBy({ id: userId });
-    if (!user) throw new Error('Usuario no encontrado');
-
     const wallet = this.walletRepository.create({
       tag,
-      chain,
       address,
       user,
+      chain,
     });
 
     return this.walletRepository.save(wallet);
@@ -40,7 +38,7 @@ export class WalletService {
     walletId: string,
     userId: string,
     tag?: string,
-    chain?: string,
+    chain?: Chain,
     address?: string
   ): Promise<Wallet | undefined> {
     const wallet = await this.getWalletById(walletId, userId);
