@@ -9,30 +9,35 @@ export class WalletService {
   private userRepository = AppDataSource.getRepository(User);
 
   async getUserWallets(userId: string): Promise<Wallet[]> {
-    return this.walletRepository.find({ where: { user: { id: userId } } });
+    return this.walletRepository.find({ where: { user: { id: userId } }, relations: ['chain'] });
   }
 
   async getWalletById(walletId: string, userId: string): Promise<Wallet | null> {
     return this.walletRepository.findOne({
       where: { id: walletId, user: { id: userId } },
+      relations: ['chain'],
     });
   }
 
-  async createWallet(
-    user: User,
-    chain: Chain,
-    tag: string | undefined,
-    address: string
-  ): Promise<Wallet> {
-    const wallet = this.walletRepository.create({
-      tag,
-      address,
-      user,
-      chain,
-    });
+    async createWallet(
+      user: User,
+      chain: Chain,
+      tag: string | undefined,
+      address: string
+    ): Promise<Wallet> {
+      const existingWallet = await this.walletRepository.findOne({ where: { address } });
+      if (existingWallet) {
+        throw new Error('Wallet already exists');
+      }
+      const wallet = this.walletRepository.create({
+        tag,
+        address,
+        user,
+        chain,
+      });
 
-    return this.walletRepository.save(wallet);
-  }
+      return this.walletRepository.save(wallet);
+    }
 
   async updateWallet(
     walletId: string,

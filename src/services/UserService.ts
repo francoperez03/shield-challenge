@@ -22,6 +22,10 @@ export class UserService {
   }
 
   async createUser(email: string, password: string): Promise<User> {
+    const existingUser = await this.userRepository.findOne({ where: { email } });
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
     const hashedPassword = await hashPassword(password);
     const user = this.userRepository.create({ email, password: hashedPassword });
     return this.userRepository.save(user);

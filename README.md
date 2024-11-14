@@ -49,9 +49,17 @@ This project is a RESTful API built with Node.js and TypeScript that allows for 
 
 ```bash
 npm install
+```
+```bash
 npm run docker:up
+```
+```bash
 npm run migration:run
+```
+```bash
 npm run seed
+```
+```bash
 npm run dev
 ```
 
