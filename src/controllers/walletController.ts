@@ -18,7 +18,7 @@ export class WalletController {
       const wallets = await this.walletService.getUserWallets(req.userId!);
       res.json(wallets);
     } catch (error) {
-      res.status(500).json({ message: 'Error del servidor' });
+      res.status(500).json({ message: 'Server error' });
     }
   }
 
@@ -29,19 +29,19 @@ export class WalletController {
       // Buscar el usuario usando `UserService`
       const user = await this.userService.findById(userId);
       if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ message: 'User not found' });
       }
 
       const chain = await this.chainService.findById(chainId);
       if (!chain) {
-        return res.status(404).json({ message: 'Cadena no encontrada' });
+        return res.status(404).json({ message: 'Chain not found' });
       }
 
       const wallet = await this.walletService.createWallet(user, chain, tag, address);
       res.status(201).json(wallet);
     } catch (error) {
       const message = (error as Error).message;
-      res.status(500).json({ message: 'Error al crear la wallet', error: message });
+      res.status(500).json({ message: 'Error creating the waller', error: message });
     }
   }
 
@@ -52,11 +52,13 @@ export class WalletController {
       const wallet = await this.walletService.getWalletById(walletId, req.userId!);
 
       if (!wallet)
-        return res.status(404).json({ message: 'Wallet no encontrada' });
+        return res.status(404).json({ message: 'Wallet not found' });
 
       res.json(wallet);
     } catch (error) {
-      res.status(500).json({ message: 'Error del servidor' });
+      const message = (error as Error).message;
+
+      res.status(500).json({ message });
     }
   }
 
@@ -74,11 +76,11 @@ export class WalletController {
       );
 
       if (!wallet)
-        return res.status(404).json({ message: 'Wallet no encontrada o no autorizada' });
+        return res.status(404).json({ message: 'Wallet not found' });
 
       res.json(wallet);
     } catch (error) {
-      res.status(500).json({ message: 'Error del servidor' });
+      res.status(500).json({ message: 'Server error' });
     }
   }
 
@@ -89,11 +91,11 @@ export class WalletController {
       const success = await this.walletService.deleteWallet(walletId, req.userId!);
 
       if (!success)
-        return res.status(404).json({ message: 'Wallet no encontrada o no autorizada' });
+        return res.status(404).json({ message: 'Wallet not found' });
 
-      res.json({ message: 'Wallet eliminada exitosamente' });
+      res.json({ message: 'Wallet removed successfully' });
     } catch (error) {
-      res.status(500).json({ message: 'Error del servidor' });
+      res.status(500).json({ message: 'Server error' });
     }
   }
 }

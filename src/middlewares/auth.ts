@@ -18,7 +18,6 @@ export const authenticateToken = (
     res.status(401).json({ message: 'Acceso denegado: Token no proporcionado' });
     return; 
   }
-
   jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded: any) => {
     if (err) {
       res.status(403).json({ message: 'Token inválido o expirado' });
