@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from './User';
+import { Chain } from './Chain';
 
 @Entity()
 export class Wallet {
@@ -15,13 +16,14 @@ export class Wallet {
   @Column({ nullable: true })
   tag: string;
 
-  @Column()
-  chain: string;
-
   @Column({ unique: true })
   address: string;
 
   @ManyToOne(() => User, (user) => user.wallets)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => Chain, (chain) => chain.wallets)
+  @JoinColumn({ name: 'chain_id' })
+  chain: Chain;
 }
