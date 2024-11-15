@@ -25,7 +25,7 @@ export class WalletService {
       tag: string | undefined,
       address: string
     ): Promise<Wallet> {
-      const existingWallet = await this.walletRepository.findOne({ where: { address } });
+      const existingWallet = await this.walletRepository.findOne({ where: { address, chain } });
       if (existingWallet) {
         throw new Error('Wallet already exists');
       }

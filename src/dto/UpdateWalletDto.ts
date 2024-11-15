@@ -1,12 +1,6 @@
 import { IsString, IsOptional, IsUUID } from 'class-validator';
 
 export class UpdateWalletDto {
-  @IsUUID()
-  walletId: string;
-
-  @IsUUID()
-  userId: string;
-
   @IsOptional()
   @IsString()
   tag?: string;
@@ -16,6 +10,6 @@ export class UpdateWalletDto {
   address?: string;
 
   @IsOptional()
-  @IsUUID()
+  @IsString()
   chainId?: string;
 }

@@ -5,6 +5,8 @@ import { UserService } from 'services/UserService';
 import { ChainService } from 'services/ChainService';
 import { CreateWalletDto } from 'dto/CreateWalletDto';
 import { Request, Response } from 'express';
+import { UpdateWalletDto } from 'dto/UpdateWalletDto';
+import { Chain } from 'entities/Chain';
 
 export class WalletController {
   constructor (
@@ -22,17 +24,17 @@ export class WalletController {
     }
   }
 
-  async createWallet(req: Request<unknown, unknown, CreateWalletDto>, res: Response) {
-    const { userId, tag, chainId, address } = req.body;
+  async createWallet(req:AuthRequest<CreateWalletDto> , res: Response) {
+    const { tag, chainId, address } = req.body;
 
     try {
-      // Buscar el usuario usando `UserService`
-      const user = await this.userService.findById(userId);
+      console.log(req.userId)
+      const user = await this.userService.findById(req.userId!);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
 
-      const chain = await this.chainService.findById(chainId);
+      const chain = await this.chainService.findByChainId(chainId);
       if (!chain) {
         return res.status(404).json({ message: 'Chain not found' });
       }
@@ -41,7 +43,12 @@ export class WalletController {
       res.status(201).json(wallet);
     } catch (error) {
       const message = (error as Error).message;
-      res.status(500).json({ message: 'Error creating the waller', error: message });
+      if (message === 'Wallet already exists') {
+        res.status(409).json({ message });
+      } else {
+        console.log(message)
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
     }
   }
 
@@ -62,11 +69,16 @@ export class WalletController {
     }
   }
 
-  async updateWallet(req: AuthRequest, res: Response) {
+  async updateWallet(req: AuthRequest<UpdateWalletDto>, res: Response) {
     const walletId = req.params.id;
-    const { tag, chain, address } = req.body;
+    const { tag, chainId, address } = req.body;
 
     try {
+      let chain;
+      if (chainId !== undefined){
+        const foundChain = await this.chainService.findByChainId(chainId);
+        chain = foundChain || undefined;
+      }
       const wallet = await this.walletService.updateWallet(
         walletId,
         req.userId!,

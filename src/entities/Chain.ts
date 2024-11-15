@@ -7,8 +7,11 @@ export class Chain {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
+
+  @Column({ unique: true })
+  chainId: string;
 
   @Column()
   network: string;
