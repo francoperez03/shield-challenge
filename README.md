@@ -22,8 +22,7 @@ This project is a RESTful API built with Node.js and TypeScript that allows for 
     - [Wallets (Protected, requires authentication)](#wallets-protected-requires-authentication)
   - [Testing](#testing)
     - [Running Automated Tests](#running-automated-tests)
-    - [Using the `api.rest` File](#using-the-apirest-file)
-      - [Steps to Test the API](#steps-to-test-the-api)
+    - [Steps to Test the API using Postman](#steps-to-test-the-api-using-postman)
 
 ## Installation
 
@@ -105,30 +104,53 @@ To ensure the API functions correctly, automated tests have been written for bot
 npm run test
 ```
 
-### Using the `api.rest` File
+### Steps to Test the API using Postman
 
-The `api.rest` file is included in the project to facilitate API testing with [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client), a Visual Studio Code extension. This file contains pre-configured HTTP requests for all the endpoints in the API, allowing you to test them easily.
+1. **Import the Postman Collection**:
+   - In Postman, go to the **Import** section.
+   - Select the `shieldPay-challenge.postman_collection.json` file, which contains all the requests needed to test the API.
+   - Once imported, you’ll see a collection named **shieldPay-challenge** with the following requests:
+     - **SignIn**: to log in and get the `accessToken`.
+     - **Refresh**: to refresh the access token using the `refreshToken`.
+     - **Create Wallet**: to create a new wallet.
+     - **Get Wallets**: to retrieve all wallets.
+     - **Get Wallet by id**: to retrieve a specific wallet by its ID.
+     - **Update Wallet**: to update a specific wallet.
+     - **Delete Wallet**: to delete a specific wallet.
 
-#### Steps to Test the API
+2. **Run the Requests in Order**:
+   - Follow the order of requests in the collection to ensure proper testing:
+     1. **SignIn**: to obtain the initial `accessToken`.
+     2. **Refresh**: to refresh the access token if necessary.
+     3. **Create Wallet**: to create a new wallet and get the `walletId`.
+     4. **Get Wallets** and **Get Wallet by id**: to verify the wallet was created successfully.
+     5. **Update Wallet** and **Delete Wallet**: to modify and delete the wallet.
 
-1. **Install REST Client Extension**:
-   - Open Visual Studio Code.
-   - Go to the Extensions Marketplace (`Ctrl+Shift+X` or `Cmd+Shift+X`).
-   - Search for "REST Client" and install the extension.
+3. **Post-Request Scripts to Save Tokens**:
+   - The following post-request scripts are used to automatically save **`accessToken`** and **`walletId`** after executing **SignIn** and **Create Wallet**, respectively:
 
-2. **Run the Application**:
-   - Make sure your application is running on `http://localhost:3000` (or update the `@baseUrl` variable in the `api.rest` file to match your server's URL).
-   - Use the command `npm run dev` to start the application.
-
-3. **Open the `api.rest` File**:
-   - Navigate to the `api.rest` file in the project directory.
-   - Open it in Visual Studio Code.
-
-4. **Make Requests**:
-   - Click the "Send Request" button that appears above each request block in the `api.rest` file.
-   - Follow the order of the requests to test different endpoints.
-
-5. **Understand the Variables**:
-   - The file uses variables like `@baseUrl`, `@token`, and `@walletId` for reusability. Replace these values with your own if needed:
-     - `@token`: The JWT token obtained after signing in (`POST /auth/signin`).
-     - `@walletId`: The ID of the wallet created or fetched during testing (`POST /wallets` or `GET /wallets`).
+   **SignIn Post-Request Script**:
+    ```javascript
+       const response = pm.response.json();
+    
+       if (response.accessToken) {
+           pm.collectionVariables.set("accessToken", response.accessToken);
+           console.log("Access Token saved:", response.accessToken);
+       } else {
+           console.error("The access token is not in the response.");
+       }
+    ```
+  
+    **Create Wallet Post-Request Script**:
+    ```javascript
+    const response = pm.response.json();
+    if (response.id) {
+          pm.collectionVariables.set("walletId", response.id);
+          console.log("Wallet ID saved:", response.id);
+      } else {
+          console.error("The wallet ID is not in the response.");
+      }
+    ```
+    
+    By following these steps, you can test each endpoint in Postman using the collection, ensuring that the accessToken and walletId values are saved and used properly throughout the requests.
+  

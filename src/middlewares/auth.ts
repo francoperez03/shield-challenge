@@ -16,15 +16,17 @@ export const authenticateToken = (
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    res.status(401).json({ message: 'Acceso denegado: Token no proporcionado' });
-    return; 
+    res.status(401).json({ message: 'Access denied: Token not supplied' });
+    return;
   }
+
   jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded: any) => {
     if (err) {
-      res.status(403).json({ message: 'Token inválido o expirado' });
-      return;
+      return res.status(403).json({ message: 'Invalid or expired token' });
     }
+
     req.userId = decoded.userId;
     next();
   });
 };
+

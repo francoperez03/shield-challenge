@@ -4,13 +4,14 @@ import dotenv from 'dotenv';
 import { AppDataSource } from './config/data-source';
 import authRoutes from './routes/authRoutes';
 import walletRoutes from './routes/walletRoutes';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
-
+app.use(cookieParser());
 AppDataSource.initialize()
   .then(() => {
     console.log('Database connection successfully');
