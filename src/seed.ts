@@ -14,9 +14,9 @@ async function seed() {
 
   // Seed para la tabla Chain
   const chains = [
-    { name: 'Ethereum', network: 'mainnet', rpcUrl: 'https://mainnet.infura.io/v3/YOUR-PROJECT-ID', explorerUrl: 'https://etherscan.io' },
-    { name: 'Polygon', network: 'mainnet', rpcUrl: 'https://polygon-rpc.com', explorerUrl: 'https://polygonscan.com' },
-    { name: 'Binance Smart Chain', network: 'mainnet', rpcUrl: 'https://bsc-dataseed.binance.org', explorerUrl: 'https://bscscan.com' },
+    { name: 'Ethereum', chainId:"1", network: 'mainnet', rpcUrl: 'https://mainnet.infura.io/v3/YOUR-PROJECT-ID', explorerUrl: 'https://etherscan.io' },
+    { name: 'Polygon', chainId:"137", network: 'mainnet', rpcUrl: 'https://polygon-rpc.com', explorerUrl: 'https://polygonscan.com' },
+    { name: 'Binance Smart Chain', chainId:"56", network: 'mainnet', rpcUrl: 'https://bsc-dataseed.binance.org', explorerUrl: 'https://bscscan.com' },
   ];
 
   for (const chainData of chains) {
@@ -51,7 +51,7 @@ async function seed() {
   if (user1 && ethereumChain) {
     const wallet1 = walletRepository.create({
       tag: 'Main Wallet',
-      address: '0x1234...abcd',
+      address: '0x1234567890abcdef1234567890abcdef12345678',
       user: user1,
       chain: ethereumChain,
     });
@@ -61,7 +61,7 @@ async function seed() {
   if (user2 && polygonChain) {
     const wallet2 = walletRepository.create({
       tag: 'Savings Wallet',
-      address: '0xabcd...1234',
+      address: '0x1234567890abcdef1234567890abcdef12345670',
       user: user2,
       chain: polygonChain,
     });
