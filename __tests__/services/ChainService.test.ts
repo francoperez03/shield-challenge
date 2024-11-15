@@ -28,22 +28,22 @@ describe('ChainService', () => {
       const chain = new Chain();
       chain.id = chainId;
 
-      chainRepository.findOneBy.mockResolvedValue(chain);
+      chainRepository.findOne.mockResolvedValue(chain);
 
-      const result = await chainService.findById(chainId);
+      const result = await chainService.findByChainId(chainId);
 
-      expect(chainRepository.findOneBy).toHaveBeenCalledWith({ id: chainId });
+      expect(chainRepository.findOne).toHaveBeenCalledWith({ where: {chainId} });
       expect(result).toEqual(chain);
     });
 
     it('should return null when chain not found by id', async () => {
       const chainId = 'non-existent-chain-id';
 
-      chainRepository.findOneBy.mockResolvedValue(null);
+      chainRepository.findOne.mockResolvedValue(null);
 
-      const result = await chainService.findById(chainId);
+      const result = await chainService.findByChainId(chainId);
 
-      expect(chainRepository.findOneBy).toHaveBeenCalledWith({ id: chainId });
+      expect(chainRepository.findOne).toHaveBeenCalledWith({ where: {chainId} });
       expect(result).toBeNull();
     });
   });
@@ -54,22 +54,22 @@ describe('ChainService', () => {
       const chain = new Chain();
       chain.name = name;
 
-      chainRepository.findOneBy.mockResolvedValue(chain);
+      chainRepository.findOne.mockResolvedValue(chain);
 
       const result = await chainService.findByName(name);
 
-      expect(chainRepository.findOneBy).toHaveBeenCalledWith({ name });
+      expect(chainRepository.findOne).toHaveBeenCalledWith({ where: {name} });
       expect(result).toEqual(chain);
     });
 
     it('should return null when chain not found by name', async () => {
       const name = 'UnknownChain';
 
-      chainRepository.findOneBy.mockResolvedValue(null);
+      chainRepository.findOne.mockResolvedValue(null);
 
       const result = await chainService.findByName(name);
 
-      expect(chainRepository.findOneBy).toHaveBeenCalledWith({ name });
+      expect(chainRepository.findOne).toHaveBeenCalledWith({ where: {name} });
       expect(result).toBeNull();
     });
   });

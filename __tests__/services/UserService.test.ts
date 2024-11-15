@@ -35,9 +35,6 @@ describe('UserService', () => {
 
       const result = await userService.findByEmail(email);
       if(result){
-        console.log(result)
-        console.log(user)
-        console.log('---')
         expect(result).toMatchObject(user);
         expect(userRepository.findOne).toHaveBeenCalledWith({ where: { email } });
       }
