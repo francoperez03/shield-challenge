@@ -57,18 +57,19 @@ describe('WalletService', () => {
       expect(result).toMatchObject(wallet);
     });
 
-    it('should throw an error if wallet address already exists', async () => {
+    it('should throw an error if wallet address and chainId already exists', async () => {
       const user = new User();
       const chain = new Chain();
+      chain.chainId = '1'
       const tag = 'Main Wallet';
       const address = '0x1234...abcd';
 
-      walletRepository.findOne.mockResolvedValue({ address } as Wallet);
+      walletRepository.findOne.mockResolvedValue({ address, chain } as Wallet);
 
       await expect(walletService.createWallet(user, chain, tag, address)).rejects.toThrow(
         'Wallet already exists',
       );
-      expect(walletRepository.findOne).toHaveBeenCalledWith({ where: { address } });
+      expect(walletRepository.findOne).toHaveBeenCalledWith({ where: { address, chain: { chainId: chain.chainId } } });
     });
   });
 

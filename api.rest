@@ -2,7 +2,7 @@
 @baseUrl = http://localhost:3000/api
 
 ### Variables for Authentication
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NmEyNmNkMy1jMTA2LTQ4YWUtYjdmYi0zNjBkY2NlMTU2YmEiLCJpYXQiOjE3MzE1OTAwNDAsImV4cCI6MTczMTU5MzY0MH0.vR05h695zzVPYED-kag7AE3D5h2MWjJVhzJWXUikFBo
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzOTgxNjBjMC03Y2ZjLTQ2YmUtYmNlMC05YjQ4OWJiYWIxMzYiLCJpYXQiOjE3MzE2NzI0MjQsImV4cCI6MTczMTY3NjAyNH0.azy2HUcwhM2xsDPib2IpsY1q2-d2LdVGxd0fwxKjrA8
 
 ### 1. Sign In
 POST {{baseUrl}}/auth/signin
@@ -19,10 +19,9 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "userId": "your-user-id-here",
   "tag": "Main Wallet",
-  "chainId": "your-chain-id-here",
-  "address": "0x1234...abcd"
+  "chainId": "1", 
+  "address": "0x1234567890abcdef1234567890abcdef12345675"
 }
 
 ### 3. Get All Wallets (Protected, requires token)
@@ -30,20 +29,20 @@ GET {{baseUrl}}/wallets
 Authorization: Bearer {{token}}
 
 ### 4. Get Wallet by ID (Protected, requires token)
-GET {{baseUrl}}/wallets/your-wallet-id-here
+GET {{baseUrl}}/wallets/74d8634e-3dd2-4425-9dfb-cfc5492e7e0c
 Authorization: Bearer {{token}}
 
 ### 5. Update Wallet (Protected, requires token)
-PUT {{baseUrl}}/wallets/da46a7a6-d343-4f3d-8c53-1a6433caa7e2
+PUT {{baseUrl}}/wallets/74d8634e-3dd2-4425-9dfb-cfc5492e7e0c
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
   "tag": "Updated Wallet Tag",
-  "chainId": "new-chain-id-here",
-  "address": "0xabcd...1234"
+  "chainId": "2",
+  "address": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
 }
 
 ### 6. Delete Wallet (Protected, requires token)
-DELETE {{baseUrl}}/wallets/your-wallet-id-here
+DELETE {{baseUrl}}/wallets/da46a7a6-d343-4f3d-8c53-1a6433caa7e2
 Authorization: Bearer {{token}}
