@@ -4,7 +4,7 @@ This project is a RESTful API built with Node.js and TypeScript that allows for 
 
 ## Features
 
-- **User Registration and Login** with secure authentication.
+- **Login** with secure authentication.
 - **Wallet Management**: Create, read, update, and delete (CRUD) operations.
 - **Route Protection** using JWT access tokens.
 - **Data Validation** using DTOs (Data Transfer Objects) and `class-validator`.
