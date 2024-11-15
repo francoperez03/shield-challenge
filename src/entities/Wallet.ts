@@ -16,7 +16,7 @@ export class Wallet {
   @Column({ nullable: true })
   tag: string;
 
-  @Column({ unique: true })
+  @Column()
   address: string;
 
   @ManyToOne(() => User, (user) => user.wallets)
