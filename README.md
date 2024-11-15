@@ -7,10 +7,8 @@ This project is a RESTful API built with Node.js and TypeScript that allows for 
 - **User Registration and Login** with secure authentication.
 - **Wallet Management**: Create, read, update, and delete (CRUD) operations.
 - **Route Protection** using JWT access tokens.
-- **Session Handling** using refresh tokens to renew expired access tokens.
 - **Data Validation** using DTOs (Data Transfer Objects) and `class-validator`.
 - **Modular Structure** with separated services, controllers, middlewares, and entities.
-- **Support for Multiple Blockchains** with additional metadata.
 
 ## Table of Contents
 
